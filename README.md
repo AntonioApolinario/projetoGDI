@@ -17,7 +17,6 @@
 - *Antônio Apolinário Barbosa*
 - *Jhonatan Kennedy Pires de Andrade*
 - *Matheus Barbosa Santos*
-- *Jhonatan Kennedy*
 - *Michael Felipe dos Santos*
 - *Wenderson Juvenal Lopes dos Santos*
 
