@@ -2,25 +2,18 @@
 -- CRIAÇÃO DO BD --
 -------------------
 
---Tabela Aldeia
 CREATE TABLE ALDEIA(NOME VARCHAR(20) PRIMARY KEY);
 
---Tabela Ninja
 CREATE TABLE NINJA(
   RG_NINJA VARCHAR(9), 
   NOME_CLA VARCHAR(20), 
-  NOME VARCHAR (20),
+  PRIMEIRO_NOME VARCHAR (20),
+  CODINOME VARCHAR(20),
   NOME_ALDEIA VARCHAR(20),
+  RIVAL_RG VARCHAR(20),
   PRIMARY KEY (RG_NINJA),
+  FOREIGN KEY (RIVAL_RG) REFERENCES NINJA(RG_NINJA),
   FOREIGN KEY (NOME_ALDEIA) REFERENCES ALDEIA(NOME)
-);
-
-CREATE TABLE RIVALIDADE (
-  RG_NINJA VARCHAR(9),
-  RG_RIVAL VARCHAR(9),
-  PRIMARY KEY (RG_NINJA, RG_RIVAL),
-  FOREIGN KEY (RG_NINJA) REFERENCES NINJA(RG_NINJA),
-  FOREIGN KEY (RG_RIVAL) REFERENCES NINJA(RG_NINJA)
 );
 
 CREATE TYPE RANK AS ENUM ('D', 'C', 'B', 'A', 'S', 'SS');
@@ -43,16 +36,18 @@ CREATE TYPE ELEMENTO AS ENUM (
 
 CREATE TABLE JUTSU(
   RG_NINJA VARCHAR(9), 
-  NOME VARCHAR (20), 
+  NOME VARCHAR (40), 
   ELEMENTO ELEMENTO,
   RANK RANK,
-  PRIMARY KEY(RG_NINJA, NOME)
+  PRIMARY KEY(RG_NINJA, NOME),
+  FOREIGN KEY (RG_NINJA) REFERENCES NINJA(RG_NINJA)
 );
 
---heranças
---TO BE FIXED
+--Heranças
 CREATE TABLE HOKAGE(
   RG_NINJA VARCHAR(9),
+  DATA_INICIO DATE,
+  DATA_FIM DATE,
   PRIMARY KEY (RG_NINJA),
   FOREIGN KEY (RG_NINJA) REFERENCES NINJA(RG_NINJA)
 );
@@ -75,7 +70,15 @@ CREATE TABLE GENNIN(
   FOREIGN KEY (RG_NINJA) REFERENCES NINJA(RG_NINJA)
 );
 
--- Tabela equipe
+-- Tabela 1:1
+CREATE TABLE BIJU(
+  NOME VARCHAR(20),
+  APELIDO VARCHAR(20),
+  RG_NINJA VARCHAR(9) UNIQUE,
+  PRIMARY KEY (NOME),
+  FOREIGN KEY (RG_NINJA) REFERENCES NINJA(RG_NINJA)
+);
+
 CREATE TABLE EQUIPE(NUMERO INTEGER PRIMARY KEY);
 
 -- Tabelas de entidade fraca
@@ -89,172 +92,256 @@ CREATE TABLE MISSAO(
   FOREIGN KEY (EQUIPE) REFERENCES EQUIPE(NUMERO)
 );
 
-CREATE TABLE EXAME_CHUNNIN(
-  ALDEIA VARCHAR(20),
-  DATA_INICIO DATE,
-  PRIMARY KEY (ALDEIA, DATA_INICIO),
-  FOREIGN KEY (ALDEIA) REFERENCES ALDEIA(NOME)
-);
-
-
--- tabela de relações N:N
-CREATE TABLE JOUNIN_AVALIA_GENNIN(
-  RG_NINJA_AVALIADO VARCHAR(9),
-  RG_NINJA_AVALIADOR VARCHAR(9),
-  MISSAO_EQUIPE INTEGER,
-  DATA_FINALIZACAO_EQUIPE DATE,
-  PRIMARY KEY (RG_NINJA_AVALIADO, RG_NINJA_AVALIADOR, MISSAO_EQUIPE, DATA_FINALIZACAO_EQUIPE),
-  FOREIGN KEY (RG_NINJA_AVALIADO) REFERENCES GENNIN(RG_NINJA),
-  FOREIGN KEY (RG_NINJA_AVALIADOR) REFERENCES JOUNIN(RG_NINJA),
-  FOREIGN KEY (MISSAO_EQUIPE, DATA_FINALIZACAO_EQUIPE) REFERENCES MISSAO(EQUIPE, DATA_FINALIZACAO)
-);
-
 CREATE TABLE NINJA_COMPOE_EQUIPE(
   RG_NINJA VARCHAR(9),
-  MISSAO_EQUIPE INTEGER,
-  MISSAO_DATA_FINALIZACAO DATE,
-  PRIMARY KEY (RG_NINJA, MISSAO_EQUIPE, MISSAO_DATA_FINALIZACAO),
+  EQUIPE INTEGER,
+  PRIMARY KEY (RG_NINJA, EQUIPE),
   FOREIGN KEY (RG_NINJA) REFERENCES NINJA(RG_NINJA),
-  FOREIGN KEY (MISSAO_EQUIPE, MISSAO_DATA_FINALIZACAO) REFERENCES MISSAO(EQUIPE, DATA_FINALIZACAO)
+  FOREIGN KEY (EQUIPE) REFERENCES EQUIPE(NUMERO)
 );
 
---tabela associativa
-CREATE TABLE PARTICIPA(
-  RG_JOUNIN_AVALIADOR VARCHAR(9),
-  RG_GENNIN_EXAMINADO VARCHAR(9),
-  EXAME_CHUNNIN_ALDEIA VARCHAR(20),
-  EXAME_CHUNNIN_DATA_INICIO DATE,
-  RG_CHUNNIN_ASSISTE VARCHAR(9),
-  PRIMARY KEY(RG_GENNIN_EXAMINADO,RG_JOUNIN_AVALIADOR,EXAME_CHUNNIN_ALDEIA,EXAME_CHUNNIN_DATA_INICIO),
-  FOREIGN KEY (RG_JOUNIN_AVALIADOR) REFERENCES JOUNIN(RG_NINJA),
-  FOREIGN KEY (RG_GENNIN_EXAMINADO) REFERENCES GENNIN(RG_NINJA),
-  FOREIGN KEY (EXAME_CHUNNIN_ALDEIA, EXAME_CHUNNIN_DATA_INICIO) REFERENCES EXAME_CHUNNIN(ALDEIA, DATA_INICIO),
-  FOREIGN KEY (RG_CHUNNIN_ASSISTE) REFERENCES CHUNNIN(RG_NINJA)
+-- Tabela entidade associativa
+CREATE TABLE EXAME_CHUNNIN(
+  EXAMINADOR_RG VARCHAR(9),
+  EXAMINADO_RG VARCHAR(9),
+  PRIMARY KEY (EXAMINADOR_RG, EXAMINADO_RG),
+  FOREIGN KEY (EXAMINADOR_RG) REFERENCES JOUNIN(RG_NINJA),
+  FOREIGN KEY (EXAMINADO_RG) REFERENCES GENNIN(RG_NINJA)
 );
 
+CREATE TABLE CHUNNIN_ASSISTE(
+  CHUNNIN_RG VARCHAR(9),
+  EXAMINADOR_RG VARCHAR(9),
+  EXAMINADO_RG VARCHAR(9),
+  PRIMARY KEY (CHUNNIN_RG, EXAMINADOR_RG, EXAMINADO_RG),
+  FOREIGN KEY (CHUNNIN_RG) REFERENCES CHUNNIN(RG_NINJA),
+  FOREIGN KEY (EXAMINADOR_RG, EXAMINADO_RG) REFERENCES EXAME_CHUNNIN(EXAMINADOR_RG, EXAMINADO_RG)
+);
 
--- ALDEIA
-INSERT INTO ALDEIA VALUES 
-  ('Konoha'), 
-  ('Suna'), 
-  ('Kiri'), 
-  ('Kumo'), 
-  ('Iwa');
+-- Tabela relação n-ária
+CREATE TABLE JOUNIN_AVALIA_GENNIN(
+  EXAMINADO_RG VARCHAR(9),
+  EXAMINADOR_RG VARCHAR(9),
+  EQUIPE INTEGER,
+  DATA_FINALIZACAO_MISSAO DATE,
+  PRIMARY KEY (EXAMINADO_RG, EXAMINADOR_RG, EQUIPE, DATA_FINALIZACAO_MISSAO),
+  FOREIGN KEY (EXAMINADO_RG) REFERENCES GENNIN(RG_NINJA),
+  FOREIGN KEY (EXAMINADOR_RG) REFERENCES JOUNIN(RG_NINJA),
+  FOREIGN KEY (EQUIPE, DATA_FINALIZACAO_MISSAO) REFERENCES MISSAO(EQUIPE, DATA_FINALIZACAO)
+);
 
--- EQUIPE
-INSERT INTO EQUIPE VALUES 
-  (7), 
-  (10), 
-  (4), 
-  (3), 
-  (1);
+INSERT INTO ALDEIA (NOME) VALUES
+('Konoha'),
+('Sunagakure'),
+('Kumogakure'),
+('Kirigakure'),
+('Iwagakure');
 
--- EXAME CHUNNIN
-INSERT INTO EXAME_CHUNNIN VALUES 
-  ('Konoha', '2024-01-10'),
-  ('Suna',   '2024-06-15'),
-  ('Kiri',   '2024-08-20');
+INSERT INTO NINJA (RG_NINJA, NOME_CLA, PRIMEIRO_NOME, CODINOME, NOME_ALDEIA, RIVAL_RG) VALUES
+  ('000000001', 'Uzumaki', 'Naruto', 'Ninja Laranja', 'Konoha', '000000002'),('000000002', 'Uchiha', 'Sasuke', 'Avenger', 'Konoha', '000000001'),('000000003', 'Haruno', 'Sakura', 'Punho de Aço', 'Konoha', NULL),('000000004', 'Hatake', 'Kakashi', 'Ninja Copiador', 'Konoha', NULL),
+  ('000000005', 'Sarutobi', 'Hiruzen', 'Sandaime', 'Konoha', NULL),
+  ('000000006', 'Senju', 'Tobirama', 'Nidaime', 'Konoha', NULL),
+  ('000000007', 'Senju', 'Hashirama', 'Shodai', 'Konoha', NULL),
+  ('000000008', 'Namikaze', 'Minato', 'Relâmpago Amarelo', 'Konoha', NULL),
+  ('000000009', 'Gaara', 'Sabaku', 'Gaara do Deserto', 'Sunagakure', NULL),
+  ('000000010', 'Killer', 'Bee', 'Jinchuuriki 8 Caudas', 'Kumogakure', NULL),
+  ('000000011', 'Nara', 'Shikamaru', 'Mestre das Sombras', 'Konoha', NULL),
+  ('000000012', 'Akimichi', 'Choji', 'Punho de Mil Quilos', 'Konoha', NULL),
+  ('000000013', 'Inuzuka', 'Kiba', 'Fera de Konoha', 'Konoha', NULL),
+  ('000000014', 'Aburame', 'Shino', 'Mestre dos Insetos', 'Konoha', NULL),
+  ('000000015', 'Hyuuga', 'Neji', 'Prodígio do Byakugan', 'Konoha', NULL),
+  ('000000016', 'Umino', 'Iruka', 'Instrutor', 'Konoha', NULL);
 
--- NINJA (RG, CLA, NOME, ALDEIA)
-INSERT INTO NINJA VALUES
-  ('111111111', 'Uchiha',  'Sasuke',    'Konoha'),
-  ('222222222', 'Uzumaki', 'Naruto',    'Konoha'),
-  ('333333333', 'Hatake',  'Kakashi',   'Konoha'),
-  ('444444444', 'Nara',    'Shikamaru', 'Konoha'),
-  ('555555555', 'Sabaku',  'Gaara',     'Suna'),
-  ('666666666', 'Yamanaka','Ino',       'Konoha'),
-  ('777777777', 'Akimichi','Chouji',    'Konoha'),
-  ('888888888', 'Aburame', 'Shino',     'Konoha'),
-  ('999999999', 'Hozuki',  'Suigetsu',  'Kiri'),
-  ('121212121', 'Sarutobi','Konohamaru','Konoha'),
-  ('101010101', 'Sarutobi', 'Asuma',  'Konoha'),
-  ('202020202', 'Yuhi',     'Kurenai','Konoha');
+INSERT INTO GENNIN (RG_NINJA) VALUES
+ ('000000001'), 
+ ('000000002'), 
+ ('000000003');
 
--- HERANÇAS
--- GENNIN
-INSERT INTO GENNIN VALUES 
-  ('111111111'), 
-  ('222222222'), 
-  ('444444444'), 
-  ('666666666'), 
-  ('777777777'), 
-  ('888888888'), 
-  ('121212121');
+INSERT INTO JOUNIN (RG_NINJA) VALUES ('000000004');
 
--- CHUNNIN
-INSERT INTO CHUNNIN VALUES 
-  ('444444444'), 
-  ('666666666');
+INSERT INTO HOKAGE (RG_NINJA, DATA_INICIO, DATA_FIM) VALUES
+  ('000000005', '1970-01-01', '2002-10-10'),
+  ('000000008', '2002-10-10', '2003-10-10');
 
--- JOUNIN
-INSERT INTO JOUNIN VALUES 
-  ('333333333'), 
-  ('555555555'),
-  ('101010101'),
-  ('202020202');
 
--- HOKAGE
-INSERT INTO HOKAGE VALUES 
-  ('333333333');
+INSERT INTO EQUIPE (NUMERO) VALUES (7);
 
--- RIVALIDADE
-INSERT INTO RIVALIDADE VALUES
-  ('111111111', '222222222'),
-  ('222222222', '111111111'),
-  ('444444444', '666666666'),
-  ('666666666', '444444444'),
-  ('121212121', '222222222');
+INSERT INTO NINJA_COMPOE_EQUIPE (RG_NINJA, EQUIPE) VALUES
+('000000001', 7),
+('000000002', 7),
+('000000003', 7),
+('000000004', 7);
 
--- JUTSUS
-INSERT INTO JUTSU VALUES
-  ('111111111', 'Chidori',       'RAITON',  'A'),
-  ('222222222', 'Rasengan',      'FUUTON',  'A'),
-  ('333333333', 'Raikiri',       'RAITON',  'S'),
-  ('444444444', 'Kagemane',      'DOTON',   'B'),
-  ('555555555', 'Sabaku Kyuu',   'DOTON',   'A'),
-  ('666666666', 'Shintenshin',   'YOTON',   'C'),
-  ('777777777', 'Baika no Jutsu','DOTON',   'D'),
-  ('888888888', 'Insekto Bomba', 'RANTON',  'C'),
-  ('999999999', 'Water Gun',     'SUITON',  'B'),
-  ('121212121','Sexy Jutsu',     'FUUTON',  'D');
+INSERT INTO MISSAO (EQUIPE, DATA_FINALIZACAO, RANK, RECOMPENSA, DESCRICAO) VALUES
+  (7, '2003-03-01', 'C', 500.00, 'Proteção ao construtor de pontes Tazuna'),
+  (7, '2003-04-15', 'B', 2000.00, 'Captura de bandidos no País das Ondas');
 
--- MISSAO (EQUIPE, DATA, RANK, RECOMPENSA, DESC)
-INSERT INTO MISSAO VALUES 
-  (7,  '2024-02-15', 'B',  800.00,  'Proteção de diplomata em zona neutra'),
-  (10, '2024-03-22', 'A', 1500.00, 'Espionagem em vila inimiga'),
-  (4,  '2024-01-01', 'C', 500.00,  'Patrulha de fronteira'),
-  (3,  '2024-04-20', 'D', 200.00,  'Entrega de mensagem urgente'),
-  (1,  '2024-05-12', 'S', 3000.00, 'Captura de criminoso classe S');
+INSERT INTO JUTSU (RG_NINJA, NOME, ELEMENTO, RANK) VALUES
+  ('000000001', 'Rasengan', 'FUUTON', 'A'),
+  ('000000001', 'Kage Bunshin', 'FUUTON', 'B'),
+  ('000000002', 'Chidori', 'RAITON', 'A'),
+  ('000000002', 'Amaterasu', 'ENTON', 'S'),
+  ('000000003', 'Chakra Enhanced Strength', 'DOTON', 'B'),
+  ('000000004', 'Raikiri', 'RAITON', 'S'),
+  ('000000004', 'Kamui', 'RAITON', 'SS'),
+  ('000000007', 'Mokuton Hijutsu', 'MOKUTON', 'SS'),
+  ('000000009', 'Sabaku Kyuu', 'DOTON', 'A'),
+  ('000000010', 'Tailed Beast Bomb', 'RAITON', 'SS');
 
--- NINJA_COMPOE_EQUIPE
-INSERT INTO NINJA_COMPOE_EQUIPE VALUES
-  ('111111111', 7,  '2024-02-15'),
-  ('222222222', 7,  '2024-02-15'),
-  ('333333333', 7,  '2024-02-15'),
+INSERT INTO BIJU (NOME, APELIDO, RG_NINJA) VALUES
+  ('Kurama', 'Kyuubi', '000000001'),
+  ('Shukaku', 'Ichibi', '000000009'),
+  ('Gyuki', 'Hachibi', '000000010'),
+  ('Matatabi', 'Nibi', NULL),
+  ('Isobu', 'Sanbi', NULL),
+  ('Son Gokū', 'Yonbi', NULL),
+  ('Kokuo', 'Gobi', NULL),
+  ('Saiken', 'Rokubi', NULL),
+  ('Chomei', 'Nanabi', NULL),
+  ('Juubi', 'Dez Caudas', NULL);
 
-  ('444444444', 10, '2024-03-22'),
-  ('555555555', 10, '2024-03-22'),
-  ('333333333', 10, '2024-03-22'),
+INSERT INTO EXAME_CHUNNIN (EXAMINADOR_RG, EXAMINADO_RG) VALUES
+('000000004', '000000001'),
+('000000004', '000000002');
 
-  ('666666666', 4,  '2024-01-01'),
-  ('777777777', 4,  '2024-01-01'),
+INSERT INTO CHUNNIN (RG_NINJA) VALUES ('000000016');
 
-  ('888888888', 3,  '2024-04-20'),
+INSERT INTO CHUNNIN_ASSISTE (CHUNNIN_RG, EXAMINADOR_RG, EXAMINADO_RG) VALUES
+  ('000000016', '000000004', '000000001'),
+  ('000000016', '000000004', '000000002');
 
-  ('121212121', 1,  '2024-05-12');
+INSERT INTO JOUNIN_AVALIA_GENNIN (EXAMINADO_RG, EXAMINADOR_RG, EQUIPE, DATA_FINALIZACAO_MISSAO) VALUES
+  ('000000001', '000000004', 7, '2003-03-01'),
+  ('000000002', '000000004', 7, '2003-03-01');
 
--- JOUNIN_AVALIA_GENNIN
-INSERT INTO JOUNIN_AVALIA_GENNIN VALUES
-  ('111111111', '333333333', 7,  '2024-02-15'),
-  ('222222222', '333333333', 7,  '2024-02-15'),
-  ('444444444', '555555555', 10, '2024-03-22'),
-  ('666666666', '555555555', 10, '2024-03-22'),
-  ('121212121','333333333',  1,  '2024-05-12');
 
--- PARTICIPA (JOUNIN, GENNIN, ALDEIA, DATA)
-INSERT INTO PARTICIPA VALUES
-  ('333333333', '111111111', 'Konoha', '2024-01-10', '444444444'),
-  ('333333333', '222222222', 'Konoha', '2024-01-10', '666666666'),
-  ('555555555', '444444444', 'Suna',   '2024-06-15', '666666666'),
-  ('555555555', '666666666', 'Suna',   '2024-06-15', NULL),
-  ('333333333', '121212121', 'Konoha', '2024-01-10', NULL);
+
+
+
+---- Consultas ----
+-- Group by/Having
+-- Quantos ninja konoha tem?
+SELECT nome_aldeia, COUNT(*) 
+FROM NINJA 
+GROUP BY nome_aldeia 
+HAVING nome_aldeia = 'Konoha';
+
+--Junção interna
+-- Quem são os jounin?
+SELECT * FROM JOUNIN J JOIN NINJA N ON N.rg_ninja = J.rg_ninja;
+
+--Junção externa
+-- Mostrar todos os ninjas + quais deles tem biju
+SELECT * FROM NINJA n LEFT JOIN BIJU b ON n.rg_ninja = b.rg_ninja;
+
+--Semi junção
+-- Quais ninjas tem jutsu rank s?
+SELECT primeiro_nome
+FROM NINJA
+WHERE rg_ninja IN (
+  SELECT rg_ninja FROM JUTSU WHERE rank = 'S'
+);
+
+--Anti-junção
+--Quais os ninjas que não tem biju
+SELECT * FROM NINJA N 
+LEFT JOIN BIJU B ON N.RG_NINJA = B.RG_NINJA 
+WHERE B.RG_NINJA IS NULL; 
+
+--Subconsulta do tipo escalar
+-- Qual ninja que tem mais jutsus
+SELECT n.primeiro_nome, n.nome_cla,
+       (SELECT COUNT(*) 
+        FROM JUTSU j 
+        WHERE j.rg_ninja = n.rg_ninja) AS qtd_jutsus
+FROM NINJA n
+ORDER BY qtd_jutsus DESC
+LIMIT 1;
+
+--Subconsulta do tipo linha
+--Qual ninja tem mais missões?
+SELECT *
+FROM (
+    SELECT n.primeiro_nome, n.nome_aldeia
+    FROM NINJA n
+    JOIN NINJA_COMPOE_EQUIPE ce ON n.rg_ninja = ce.rg_ninja
+    JOIN MISSAO m ON ce.equipe = m.equipe
+    GROUP BY n.primeiro_nome, n.nome_aldeia
+    ORDER BY COUNT(*) DESC
+    LIMIT 1
+) AS top_ninja;
+
+--Subconsulta do tipo tabela
+--Quais ninjas tem 2 jutsu?
+SELECT *
+FROM (
+    SELECT n.primeiro_nome, n.nome_cla, COUNT(j.nome) AS qtd_jutsus
+    FROM NINJA n
+    LEFT JOIN JUTSU j ON n.rg_ninja = j.rg_ninja
+    GROUP BY n.primeiro_nome, n.nome_cla
+) AS tabela_jutsus
+WHERE qtd_jutsus = 2;
+
+--Operação de conjunto
+--Quais os nomes de todos os ninjas e todas as bijus?
+SELECT primeiro_nome AS nome
+FROM NINJA
+UNION
+SELECT nome
+FROM BIJU;
+
+--Procedure
+CREATE OR REPLACE PROCEDURE listar_jutsus_ninja(p_rg VARCHAR)
+LANGUAGE plpgsql
+AS $$
+DECLARE r RECORD;
+BEGIN
+    RAISE NOTICE 'Jutsus do ninja %:', p_rg;
+
+    FOR r IN
+        SELECT nome, elemento, rank
+        FROM JUTSU
+        WHERE rg_ninja = p_rg
+    LOOP
+        RAISE NOTICE ' - Nome: %, Elemento: %, Rank: %', r.nome, r.elemento, r.rank;
+    END LOOP;
+END;
+$$;
+
+--Function
+CREATE OR REPLACE FUNCTION contar_missoes_ninja(p_rg VARCHAR)
+RETURNS INT
+LANGUAGE plpgsql
+AS $$
+DECLARE qtd INT;
+BEGIN
+    SELECT COUNT(*) INTO qtd
+    FROM NINJA_COMPOE_EQUIPE ce
+    JOIN MISSAO m ON ce.equipe = m.equipe
+    WHERE ce.rg_ninja = p_rg;
+
+    RETURN qtd;
+END;
+$$;
+
+--Trigger
+CREATE TABLE LOG_NINJA (
+    id SERIAL PRIMARY KEY,
+    rg_ninja VARCHAR(9),
+    data_insercao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION log_novo_ninja()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO LOG_NINJA(rg_ninja) VALUES (NEW.rg_ninja);
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_log_ninja
+AFTER INSERT ON NINJA
+FOR EACH ROW
+EXECUTE FUNCTION log_novo_ninja();
