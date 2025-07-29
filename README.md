@@ -47,7 +47,7 @@ docker compose up --build
 Para acessar o terminal interativo (CLI) do PostgreSQL:
 
 ```bash
-docker exec -it db psql -U postgres -d postgres
+docker exec -it sql psql -U postgres -d postgres
 ```
 
 ---
@@ -73,6 +73,18 @@ docker compose down -v
 > O parâmetro `-v` remove também os volumes, o que zera os dados persistidos (como tabelas e registros). Use com cuidado caso esteja testando alterações e queira um ambiente limpo ao reiniciar.
 
 ---
+
+## 🛠 Acessando o CLI do Mongo
+
+```bash
+docker exec -it no_sql mongosh -u admin -p admin123
+```
+
+Entrando no mongo:
+
+```bash
+use ninjaAdmin
+```
 
 ## ✅ Requisitos
 

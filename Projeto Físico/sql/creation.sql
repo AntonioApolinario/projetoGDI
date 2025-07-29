@@ -8,7 +8,7 @@ CREATE TABLE NINJA(
   RG_NINJA VARCHAR(9), 
   NOME_CLA VARCHAR(20), 
   PRIMEIRO_NOME VARCHAR (20),
-  CODINOME VARCHAR(20),
+  CODINOME VARCHAR(40),
   NOME_ALDEIA VARCHAR(20),
   RIVAL_RG VARCHAR(20),
   PRIMARY KEY (RG_NINJA),
@@ -131,50 +131,77 @@ CREATE TABLE JOUNIN_AVALIA_GENNIN(
 );
 
 INSERT INTO ALDEIA (NOME) VALUES
-('Konoha'),
-('Sunagakure'),
-('Kumogakure'),
-('Kirigakure'),
-('Iwagakure');
+  ('Konoha'),
+  ('Sunagakure'),
+  ('Kumogakure'),
+  ('Kirigakure'),
+  ('Iwagakure');
 
 INSERT INTO NINJA (RG_NINJA, NOME_CLA, PRIMEIRO_NOME, CODINOME, NOME_ALDEIA, RIVAL_RG) VALUES
-  ('000000001', 'Uzumaki', 'Naruto', 'Ninja Laranja', 'Konoha', '000000002'),('000000002', 'Uchiha', 'Sasuke', 'Avenger', 'Konoha', '000000001'),('000000003', 'Haruno', 'Sakura', 'Punho de Aço', 'Konoha', NULL),('000000004', 'Hatake', 'Kakashi', 'Ninja Copiador', 'Konoha', NULL),
+  ('000000001', 'Uzumaki', 'Naruto', 'Ninja Laranja', 'Konoha', '000000002'),('000000002', 'Uchiha', 'Sasuke', 'Avenger', 'Konoha', '000000001'),('000000003', 'Haruno', 'Sakura', 'Punho de Aço', 'Konoha', '000000017'),('000000004', 'Hatake', 'Kakashi', 'Ninja Copiador', 'Konoha', NULL),
   ('000000005', 'Sarutobi', 'Hiruzen', 'Sandaime', 'Konoha', NULL),
   ('000000006', 'Senju', 'Tobirama', 'Nidaime', 'Konoha', NULL),
   ('000000007', 'Senju', 'Hashirama', 'Shodai', 'Konoha', NULL),
   ('000000008', 'Namikaze', 'Minato', 'Relâmpago Amarelo', 'Konoha', NULL),
-  ('000000009', 'Gaara', 'Sabaku', 'Gaara do Deserto', 'Sunagakure', NULL),
+  ('000000009', 'Gaara', 'Sabaku', 'Gaara do Deserto', 'Sunagakure', '000000001'),
   ('000000010', 'Killer', 'Bee', 'Jinchuuriki 8 Caudas', 'Kumogakure', NULL),
   ('000000011', 'Nara', 'Shikamaru', 'Mestre das Sombras', 'Konoha', NULL),
   ('000000012', 'Akimichi', 'Choji', 'Punho de Mil Quilos', 'Konoha', NULL),
   ('000000013', 'Inuzuka', 'Kiba', 'Fera de Konoha', 'Konoha', NULL),
   ('000000014', 'Aburame', 'Shino', 'Mestre dos Insetos', 'Konoha', NULL),
   ('000000015', 'Hyuuga', 'Neji', 'Prodígio do Byakugan', 'Konoha', NULL),
-  ('000000016', 'Umino', 'Iruka', 'Instrutor', 'Konoha', NULL);
+  ('000000016', 'Umino', 'Iruka', 'Instrutor', 'Konoha', NULL),
+  ('000000017', 'Yamanaka', 'Ino', 'Flor Mortal', 'Konoha', '000000003'),
+  ('000000018', 'Nara', 'Shikaku', 'Estrategista', 'Konoha', NULL),
+  ('000000019', 'Kamizuki', 'Izumo', 'Guarda do Portão', 'Konoha', NULL),
+  ('000000020', 'Kotetsu', 'Hagane', 'Guarda do Portão', 'Konoha', NULL),
+  ('000000021', 'Maito', 'Gai', 'Sensei da Juventude', 'Konoha', '000000004'),
+  ('000000022', 'Rock', 'Lee', 'Jovem Gênio do Taijutsu', 'Konoha', '000000002'),
+  ('000000023', 'Hyuuga', 'Hinata', 'Princesa do Byakugan', 'Konoha', NULL),
+  ('000000024', 'Yuuhi', 'Kurenai', 'Mestra do Genjutsu', 'Konoha', NULL),
+  ('000000025', NULL, 'Tenten', 'Mestra das Armas', 'Konoha', NULL),
+  ('000000026', 'Sarutobi', 'Asuma', 'Mestre do Vento', 'Konoha', NULL),
+  ('000000027', 'Sabaku', 'Kankuro', 'Mestre de Marionetes', 'Sunagakure', '000000025'),
+  ('000000028', 'Sabaku', 'Temari', 'Dama do Vento', 'Sunagakure', '000000017');
 
 INSERT INTO GENNIN (RG_NINJA) VALUES
- ('000000001'), 
- ('000000002'), 
- ('000000003');
+  ('000000001'), ('000000002'), ('000000003'),
+  ('000000011'), ('000000012'), ('000000017'),
+  ('000000013'), ('000000014'), ('000000023'),
+  ('000000015'), ('000000022'), ('000000025'),
+  ('000000009'), ('000000027'), ('000000028');
 
-INSERT INTO JOUNIN (RG_NINJA) VALUES ('000000004');
+INSERT INTO CHUNNIN (RG_NINJA) VALUES 
+  ('000000016'),('000000011');
+
+INSERT INTO JOUNIN (RG_NINJA) VALUES 
+  ('000000004'), ('000000021'), ('000000024'), ('000000026');
 
 INSERT INTO HOKAGE (RG_NINJA, DATA_INICIO, DATA_FIM) VALUES
   ('000000005', '1970-01-01', '2002-10-10'),
   ('000000008', '2002-10-10', '2003-10-10');
 
-
-INSERT INTO EQUIPE (NUMERO) VALUES (7);
+INSERT INTO EQUIPE (NUMERO) VALUES (7),(8),(9),(10),(3);
 
 INSERT INTO NINJA_COMPOE_EQUIPE (RG_NINJA, EQUIPE) VALUES
-('000000001', 7),
-('000000002', 7),
-('000000003', 7),
-('000000004', 7);
+  ('000000001', 7),('000000002', 7),('000000003', 7),('000000004', 7),
+  ('000000024', 8),('000000013', 8),('000000014', 8),('000000023', 8),
+  ('000000021', 9),('000000015', 9),('000000022', 9),('000000025', 9),
+  ('000000026', 10),('000000011', 10),('000000012', 10),('000000017', 10),
+  ('000000009', 3),('000000027', 3),('000000028', 3);
+
 
 INSERT INTO MISSAO (EQUIPE, DATA_FINALIZACAO, RANK, RECOMPENSA, DESCRICAO) VALUES
   (7, '2003-03-01', 'C', 500.00, 'Proteção ao construtor de pontes Tazuna'),
-  (7, '2003-04-15', 'B', 2000.00, 'Captura de bandidos no País das Ondas');
+  (7, '2003-04-15', 'B', 2000.00, 'Captura de bandidos no País das Ondas'),
+  (8, '2003-05-10', 'D', 150.00, 'Captura de gato perdido para uma senhora de Konoha'),
+  (8, '2003-06-01', 'C', 600.00, 'Escolta de um comerciante local'),
+  (9, '2003-05-20', 'B', 1500.00, 'Neutralização de ninjas desertores próximos à fronteira'),
+  (9, '2003-06-15', 'A', 4500.00, 'Proteção de diplomata durante tratado de paz'),
+  (10, '2003-05-25', 'C', 500.00, 'Proteção de carregamento de suprimentos'),
+  (10, '2003-06-10', 'B', 2500.00, 'Combate a bandidos em rota comercial'),
+  (3, '2003-06-05', 'B', 3000.00, 'Eliminação de invasores no deserto'),
+  (7, '2003-07-01', 'A', 5000.00, 'Infiltração e coleta de informações em vila inimiga');
 
 INSERT INTO JUTSU (RG_NINJA, NOME, ELEMENTO, RANK) VALUES
   ('000000001', 'Rasengan', 'FUUTON', 'A'),
@@ -201,94 +228,30 @@ INSERT INTO BIJU (NOME, APELIDO, RG_NINJA) VALUES
   ('Juubi', 'Dez Caudas', NULL);
 
 INSERT INTO EXAME_CHUNNIN (EXAMINADOR_RG, EXAMINADO_RG) VALUES
-('000000004', '000000001'),
-('000000004', '000000002');
-
-INSERT INTO CHUNNIN (RG_NINJA) VALUES ('000000016');
+  ('000000004', '000000001'),('000000004', '000000002'),
+  ('000000004', '000000003'),('000000024', '000000013'),
+  ('000000024', '000000014'),('000000024', '000000023'),
+  ('000000021', '000000015'),('000000021', '000000022'),
+  ('000000021', '000000025'),('000000026', '000000011'),
+  ('000000026', '000000012'),('000000026', '000000017');
 
 INSERT INTO CHUNNIN_ASSISTE (CHUNNIN_RG, EXAMINADOR_RG, EXAMINADO_RG) VALUES
   ('000000016', '000000004', '000000001'),
   ('000000016', '000000004', '000000002');
 
-INSERT INTO JOUNIN_AVALIA_GENNIN (EXAMINADO_RG, EXAMINADOR_RG, EQUIPE, DATA_FINALIZACAO_MISSAO) VALUES
+INSERT INTO JOUNIN_AVALIA_GENNIN 
+(EXAMINADO_RG, EXAMINADOR_RG, EQUIPE, DATA_FINALIZACAO_MISSAO) VALUES
   ('000000001', '000000004', 7, '2003-03-01'),
-  ('000000002', '000000004', 7, '2003-03-01');
-
-
-
-
-
----- Consultas ----
--- Group by/Having
--- Quantos ninja konoha tem?
-SELECT nome_aldeia, COUNT(*) 
-FROM NINJA 
-GROUP BY nome_aldeia 
-HAVING nome_aldeia = 'Konoha';
-
---Junção interna
--- Quem são os jounin?
-SELECT * FROM JOUNIN J JOIN NINJA N ON N.rg_ninja = J.rg_ninja;
-
---Junção externa
--- Mostrar todos os ninjas + quais deles tem biju
-SELECT * FROM NINJA n LEFT JOIN BIJU b ON n.rg_ninja = b.rg_ninja;
-
---Semi junção
--- Quais ninjas tem jutsu rank s?
-SELECT primeiro_nome
-FROM NINJA
-WHERE rg_ninja IN (
-  SELECT rg_ninja FROM JUTSU WHERE rank = 'S'
-);
-
---Anti-junção
---Quais os ninjas que não tem biju
-SELECT * FROM NINJA N 
-LEFT JOIN BIJU B ON N.RG_NINJA = B.RG_NINJA 
-WHERE B.RG_NINJA IS NULL; 
-
---Subconsulta do tipo escalar
--- Qual ninja que tem mais jutsus
-SELECT n.primeiro_nome, n.nome_cla,
-       (SELECT COUNT(*) 
-        FROM JUTSU j 
-        WHERE j.rg_ninja = n.rg_ninja) AS qtd_jutsus
-FROM NINJA n
-ORDER BY qtd_jutsus DESC
-LIMIT 1;
-
---Subconsulta do tipo linha
---Qual ninja tem mais missões?
-SELECT *
-FROM (
-    SELECT n.primeiro_nome, n.nome_aldeia
-    FROM NINJA n
-    JOIN NINJA_COMPOE_EQUIPE ce ON n.rg_ninja = ce.rg_ninja
-    JOIN MISSAO m ON ce.equipe = m.equipe
-    GROUP BY n.primeiro_nome, n.nome_aldeia
-    ORDER BY COUNT(*) DESC
-    LIMIT 1
-) AS top_ninja;
-
---Subconsulta do tipo tabela
---Quais ninjas tem 2 jutsu?
-SELECT *
-FROM (
-    SELECT n.primeiro_nome, n.nome_cla, COUNT(j.nome) AS qtd_jutsus
-    FROM NINJA n
-    LEFT JOIN JUTSU j ON n.rg_ninja = j.rg_ninja
-    GROUP BY n.primeiro_nome, n.nome_cla
-) AS tabela_jutsus
-WHERE qtd_jutsus = 2;
-
---Operação de conjunto
---Quais os nomes de todos os ninjas e todas as bijus?
-SELECT primeiro_nome AS nome
-FROM NINJA
-UNION
-SELECT nome
-FROM BIJU;
+  ('000000002', '000000004', 7, '2003-03-01'),
+  ('000000013', '000000024', 8, '2003-05-10'),
+  ('000000014', '000000024', 8, '2003-05-10'),
+  ('000000023', '000000024', 8, '2003-05-10'),
+  ('000000015', '000000021', 9, '2003-05-20'),
+  ('000000022', '000000021', 9, '2003-05-20'),
+  ('000000025', '000000021', 9, '2003-05-20'),
+  ('000000011', '000000026', 10, '2003-05-25'),
+  ('000000012', '000000026', 10, '2003-05-25'),
+  ('000000017', '000000026', 10, '2003-05-25');
 
 --Procedure
 CREATE OR REPLACE PROCEDURE listar_jutsus_ninja(p_rg VARCHAR)

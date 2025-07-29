@@ -1,6 +1,6 @@
 services:
-  db:
-    container_name: db
+  sql:
+    container_name: sql
     image: postgres:13.4
     environment:
       - POSTGRES_DB=postgres
@@ -9,4 +9,17 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./scripts/creation.sql:/docker-entrypoint-initdb.d/creation.sql
+      - ./sql/creation.sql:/docker-entrypoint-initdb.d/creation.sql
+
+  no_sql:
+    container_name: no_sql
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - ./data:/data/db
+      - ./no_sql:/docker-entrypoint-initdb.d
