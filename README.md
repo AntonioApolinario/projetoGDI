@@ -122,6 +122,54 @@ Entrando no mongo:
 use ninjaAdmin
 ```
 
+---
+
+## 🐍 Executando o Script Python (Consultas no Banco)
+
+Este projeto inclui um script Python que se conecta ao banco de dados PostgreSQL via Docker e permite executar consultas SQL diretamente com uma interface gráfica simples (usando `pandasgui`).
+
+### 📁 Estrutura esperada
+
+```
+.
+├── Projeto Físico/
+│   └── sql/
+│       └── consultas.py
+│       └── venv/ (será ignorado pelo Git)
+│       └── requirements.txt
+└── README.md
+```
+
+### ✅ Pré-requisitos
+
+- Python 3.10+ instalado
+- Banco de dados já rodando com `docker compose up --build`
+
+### 🔧 Criando e ativando o ambiente virtual (linux)
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 📦 Instalando as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### ▶️ Executando o script de consultas
+
+Com o ambiente ativado e dependências instaladas, execute:
+
+```bash
+python "Projeto Físico/sql/consultas_naruto_gui.py"
+```
+
+Isso abrirá uma interface para selecionar e visualizar consultas no banco de dados.
+
+---
+
 ## ✅ Requisitos
 
 - [Docker](https://www.docker.com/)

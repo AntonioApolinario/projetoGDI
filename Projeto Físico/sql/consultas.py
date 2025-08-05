@@ -105,9 +105,7 @@ consultas = {
     }
 }
 
-# Execução principal
 def main():
-    print("=== CONSULTAS PRÉ-DEFINIDAS NO BANCO NARUTO ===")
     for k, v in consultas.items():
         print(f"{k} - {v['titulo']}")
 
