@@ -1,1 +1,4 @@
-Projeto Físico/data/
+/Projeto Físico/sql/venv/
+/Projeto Físico/data/
+__pycache__/
+*.pyc
