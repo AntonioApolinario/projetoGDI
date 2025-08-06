@@ -2,7 +2,6 @@ import psycopg2
 import pandas as pd
 from pandasgui import show
 
-# Conexão com PostgreSQL Docker
 def conectar():
     return psycopg2.connect(
         dbname="postgres",
@@ -12,7 +11,6 @@ def conectar():
         port=5432
     )
 
-# Consultas pré-definidas
 consultas = {
     "1": {
         "titulo": "Quantos ninjas de Konoha existem?",
@@ -26,13 +24,13 @@ consultas = {
     "2": {
         "titulo": "Quem são os Jounins?",
         "sql": """
-            SELECT * FROM JOUNIN J JOIN NINJA N ON N.rg_ninja = J.rg_ninja;
+            SELECT J.* FROM JOUNIN J JOIN NINJA N ON N.rg_ninja = J.rg_ninja;
         """
     },
     "3": {
         "titulo": "Todos os ninjas e quais têm biju (LEFT JOIN)",
         "sql": """
-            SELECT * FROM NINJA n LEFT JOIN BIJU b ON n.rg_ninja = b.rg_ninja;
+            SELECT n.* FROM NINJA n LEFT JOIN BIJU b ON n.rg_ninja = b.rg_ninja;
         """
     },
     "4": {
@@ -48,7 +46,7 @@ consultas = {
     "5": {
         "titulo": "Ninjas que NÃO têm biju (Anti-junção)",
         "sql": """
-            SELECT * FROM NINJA N 
+            SELECT N.* FROM NINJA N 
             LEFT JOIN BIJU B ON N.RG_NINJA = B.RG_NINJA 
             WHERE B.RG_NINJA IS NULL;
         """
