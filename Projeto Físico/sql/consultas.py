@@ -1,6 +1,8 @@
 import psycopg2
 import pandas as pd
 from pandasgui import show
+import tkinter as tk
+from functools import partial
 
 def conectar():
     return psycopg2.connect(
@@ -13,112 +15,165 @@ def conectar():
 
 consultas = {
     "1": {
-        "titulo": "Quantos ninjas de Konoha existem?",
+        "titulo": "Quantos ninjas de Konoha existem? (GROUP BY / HAVING)",
         "sql": """
-            SELECT nome_aldeia, COUNT(*) 
-            FROM NINJA 
-            GROUP BY nome_aldeia 
-            HAVING nome_aldeia = 'Konoha';
+            SELECT
+                NOME_ALDEIA,
+                COUNT(*)
+            FROM
+                NINJA
+            GROUP BY
+                NOME_ALDEIA
+            HAVING
+                NOME_ALDEIA = 'Konoha';
         """
     },
     "2": {
-        "titulo": "Quem são os Jounins?",
+        "titulo": "Quem são os Jounins? (Junção interna)",
         "sql": """
-            SELECT J.* FROM JOUNIN J JOIN NINJA N ON N.rg_ninja = J.rg_ninja;
+            SELECT
+                N.PRIMEIRO_NOME
+            FROM
+                JOUNIN J
+            INNER JOIN
+                NINJA N ON N.RG_NINJA = J.RG_NINJA;
         """
     },
     "3": {
-        "titulo": "Todos os ninjas e quais têm biju (LEFT JOIN)",
+        "titulo": "Todos os ninjas e quais têm biju (Junção externa)",
         "sql": """
-            SELECT n.* FROM NINJA n LEFT JOIN BIJU b ON n.rg_ninja = b.rg_ninja;
+            SELECT
+                N.*
+            FROM
+                NINJA N
+            LEFT JOIN
+                BIJU B ON N.RG_NINJA = B.RG_NINJA;
         """
     },
     "4": {
         "titulo": "Ninjas que têm jutsu rank S (Semi-junção)",
         "sql": """
-            SELECT primeiro_nome
-            FROM NINJA
-            WHERE rg_ninja IN (
-              SELECT rg_ninja FROM JUTSU WHERE rank = 'S'
-            );
+            SELECT
+                PRIMEIRO_NOME
+            FROM
+                NINJA
+            WHERE
+                RG_NINJA IN (
+                    SELECT
+                        RG_NINJA
+                    FROM
+                        JUTSU
+                    WHERE
+                        RANK = 'S'
+                );
         """
     },
     "5": {
         "titulo": "Ninjas que NÃO têm biju (Anti-junção)",
         "sql": """
-            SELECT N.* FROM NINJA N 
-            LEFT JOIN BIJU B ON N.RG_NINJA = B.RG_NINJA 
-            WHERE B.RG_NINJA IS NULL;
+            SELECT
+                N.*
+            FROM
+                NINJA N
+            LEFT JOIN
+                BIJU B ON N.RG_NINJA = B.RG_NINJA
+            WHERE
+                B.RG_NINJA IS NULL;
         """
     },
     "6": {
-        "titulo": "Ninja com mais jutsus (subconsulta escalar)",
+        "titulo": "Missões com recompensa acima da média (Subconsulta escalar)",
         "sql": """
-            SELECT n.primeiro_nome, n.nome_cla,
-                   (SELECT COUNT(*) 
-                    FROM JUTSU j 
-                    WHERE j.rg_ninja = n.rg_ninja) AS qtd_jutsus
-            FROM NINJA n
-            ORDER BY qtd_jutsus DESC
-            LIMIT 1;
+            SELECT
+                DESCRICAO,
+                RECOMPENSA
+            FROM
+                MISSAO
+            WHERE
+                RECOMPENSA > (
+                    SELECT
+                        AVG(RECOMPENSA)
+                    FROM
+                        MISSAO
+                );
         """
     },
     "7": {
-        "titulo": "Ninja com mais missões (subconsulta linha)",
+        "titulo": "Ninjas que moram e tem o mesmo clã do ninja de rg = '000000006' (Subconsulta linha)",
         "sql": """
-            SELECT *
-            FROM (
-                SELECT n.primeiro_nome, n.nome_aldeia
-                FROM NINJA n
-                JOIN NINJA_COMPOE_EQUIPE ce ON n.rg_ninja = ce.rg_ninja
-                JOIN MISSAO m ON ce.equipe = m.equipe
-                GROUP BY n.primeiro_nome, n.nome_aldeia
-                ORDER BY COUNT(*) DESC
-                LIMIT 1
-            ) AS top_ninja;
+            SELECT
+                N.PRIMEIRO_NOME,
+                N.CODINOME
+            FROM
+                NINJA N
+            WHERE
+                (N.NOME_CLA, N.NOME_ALDEIA) = (
+                    SELECT
+                        NOME_CLA,
+                        NOME_ALDEIA
+                    FROM
+                        NINJA
+                    WHERE
+                        RG_NINJA = '000000006'
+                );
         """
     },
     "8": {
-        "titulo": "Ninjas com exatamente 2 jutsus (subconsulta tabela)",
+        "titulo": "Ninjas com mais jutsus (Subconsulta tabela)",
         "sql": """
-            SELECT *
-            FROM (
-                SELECT n.primeiro_nome, n.nome_cla, COUNT(j.nome) AS qtd_jutsus
-                FROM NINJA n
-                LEFT JOIN JUTSU j ON n.rg_ninja = j.rg_ninja
-                GROUP BY n.primeiro_nome, n.nome_cla
-            ) AS tabela_jutsus
-            WHERE qtd_jutsus = 2;
+            SELECT
+                N.PRIMEIRO_NOME,
+                J.QTD_JUTSUS
+            FROM
+                NINJA N
+            JOIN (
+                SELECT
+                    RG_NINJA,
+                    COUNT(*) AS QTD_JUTSUS
+                FROM
+                    JUTSU
+                GROUP BY
+                    RG_NINJA
+                HAVING
+                    COUNT(*) = (
+                        SELECT
+                            MAX(QTD)
+                        FROM (
+                            SELECT
+                                COUNT(RG_NINJA) AS QTD
+                            FROM
+                                JUTSU
+                            GROUP BY
+                                RG_NINJA
+                        ) AS SUB
+                    )
+            ) J ON N.RG_NINJA = J.RG_NINJA;
         """
     },
     "9": {
         "titulo": "Todos os nomes de ninjas e bijus (UNION)",
         "sql": """
-            SELECT primeiro_nome AS nome
-            FROM NINJA
+            SELECT
+                PRIMEIRO_NOME AS NOME
+            FROM
+                NINJA
             UNION
-            SELECT nome
-            FROM BIJU;
+            SELECT
+                NOME
+            FROM
+                BIJU;
         """
     }
 }
 
-def main():
-    for k, v in consultas.items():
-        print(f"{k} - {v['titulo']}")
 
-    escolha = input("Escolha a consulta desejada (número): ").strip()
-
-    if escolha not in consultas:
-        print("❌ Consulta inválida.")
-        return
-
+def executar_consulta(key):
     try:
         conn = conectar()
-        df = pd.read_sql(consultas[escolha]["sql"], conn)
-        print(f"\n📊 Resultado de: {consultas[escolha]['titulo']}")
-        print(df)
-        print("\n🪟 Abrindo interface gráfica (pandasgui)...")
+        sql = consultas[key]["sql"]
+        titulo = consultas[key]["titulo"]
+        df = pd.read_sql(sql, conn)
+        df.name = titulo
         show(df)
     except Exception as e:
         print(f"❌ Erro na consulta: {e}")
@@ -126,5 +181,21 @@ def main():
         if 'conn' in locals():
             conn.close()
 
+def criar_interface():
+    root = tk.Tk()
+    root.title("Consultas - Projeto Naruto")
+
+    tk.Label(root, text="Selecione uma consulta:", font=("Arial", 14, "bold")).pack(pady=10)
+
+    for key in sorted(consultas.keys()):
+        titulo = consultas[key]['titulo']
+        btn = tk.Button(root, text=f"{key} - {titulo}", width=60, anchor="w",
+                        command=partial(executar_consulta, key))
+        btn.pack(padx=10, pady=2)
+
+    tk.Label(root, text="Janela permanece aberta para novas consultas.", font=("Arial", 10)).pack(pady=10)
+
+    root.mainloop()
+
 if __name__ == "__main__":
-    main()
+    criar_interface()
