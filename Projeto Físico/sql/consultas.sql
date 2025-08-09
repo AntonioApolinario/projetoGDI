@@ -21,13 +21,15 @@ INNER JOIN
     NINJA N ON N.RG_NINJA = J.RG_NINJA;
 
 --Junção externa
--- Mostrar todos os ninjas + quais deles tem biju
+-- Todas as bijus e os nomes dos ninjas que elas possuem, se tiver 
 SELECT
-    *
+    B.NOME,
+    B.APELIDO,
+    N.PRIMEIRO_NOME
 FROM
-    NINJA N
+    BIJU B
 LEFT JOIN
-    BIJU B ON N.RG_NINJA = B.RG_NINJA;
+    NINJA N ON N.RG_NINJA = B.RG_NINJA;
 
 --Semi junção
 -- Quais ninjas tem jutsu rank s?

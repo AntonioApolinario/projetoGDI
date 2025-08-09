@@ -40,14 +40,16 @@ consultas = {
         """
     },
     "3": {
-        "titulo": "Todos os ninjas e quais têm biju (Junção externa)",
+        "titulo": "Todas as bijus e os nomes dos ninjas que elas possuem, se tiver (Junção externa)",
         "sql": """
             SELECT
-                N.*
+                B.NOME,
+                B.APELIDO,
+                N.PRIMEIRO_NOME
             FROM
-                NINJA N
+                BIJU B
             LEFT JOIN
-                BIJU B ON N.RG_NINJA = B.RG_NINJA;
+                NINJA N ON N.RG_NINJA = B.RG_NINJA;
         """
     },
     "4": {
@@ -99,7 +101,7 @@ consultas = {
         """
     },
     "7": {
-        "titulo": "Ninjas que moram e tem o mesmo clã do ninja de rg = '000000006' (Subconsulta linha)",
+        "titulo": "Ninjas com o mesmo clã e aldeia do ninja de RG=000000006 (Subconsulta linha)",
         "sql": """
             SELECT
                 N.PRIMEIRO_NOME,
@@ -166,15 +168,21 @@ consultas = {
     }
 }
 
-
-def executar_consulta(key):
+def executar_consulta(key, text_widget):
     try:
         conn = conectar()
         sql = consultas[key]["sql"]
         titulo = consultas[key]["titulo"]
+        
+        text_widget.config(state="normal")
+        text_widget.delete("1.0", tk.END)
+        text_widget.insert(tk.END, sql.strip())
+        text_widget.config(state="disabled")
+
         df = pd.read_sql(sql, conn)
         df.name = titulo
         show(df)
+
     except Exception as e:
         print(f"❌ Erro na consulta: {e}")
     finally:
@@ -183,17 +191,57 @@ def executar_consulta(key):
 
 def criar_interface():
     root = tk.Tk()
-    root.title("Consultas - Projeto Naruto")
+    root.title("Consultas SQL - Projeto Naruto")
+    root.geometry("900x700")
 
-    tk.Label(root, text="Selecione uma consulta:", font=("Arial", 14, "bold")).pack(pady=10)
+    tk.Label(root, text="Consulta SQL:", font=("Arial", 12, "bold")).pack(pady=(10, 5))
+    text_sql = tk.Text(root, height=15, width=100, wrap="word", font=("Courier", 10))
+    text_sql.pack(padx=10)
+    text_sql.config(state="disabled")
+
+    frame_botoes = tk.Frame(root)
+    frame_botoes.pack(pady=10)
+
+    tk.Label(frame_botoes, text="Escolha uma consulta:", font=("Arial", 14, "bold")).pack(pady=5)
 
     for key in sorted(consultas.keys()):
         titulo = consultas[key]['titulo']
-        btn = tk.Button(root, text=f"{key} - {titulo}", width=60, anchor="w",
-                        command=partial(executar_consulta, key))
+        btn = tk.Button(
+            frame_botoes,
+            text=f"{key} - {titulo}",
+            width=70,
+            anchor="w",
+            command=partial(executar_consulta, key, text_sql)
+        )
         btn.pack(padx=10, pady=2)
 
-    tk.Label(root, text="Janela permanece aberta para novas consultas.", font=("Arial", 10)).pack(pady=10)
+    root.mainloop()
+
+    root = tk.Tk()
+    root.title("Consultas SQL - Projeto Naruto")
+    root.geometry("900x700")
+
+    frame_botoes = tk.Frame(root)
+    frame_botoes.pack(pady=10)
+
+    tk.Label(frame_botoes, text="Escolha uma consulta:", font=("Arial", 14, "bold")).pack(pady=5)
+
+    for key in sorted(consultas.keys()):
+        titulo = consultas[key]['titulo']
+        btn = tk.Button(
+            frame_botoes,
+            text=f"{key} - {titulo}",
+            width=70,
+            anchor="w",
+            command=partial(executar_consulta, key, text_sql)
+        )
+        btn.pack(padx=10, pady=2)
+
+    tk.Label(root, text="Consulta SQL:", font=("Arial", 12, "bold")).pack(pady=(20, 5))
+
+    text_sql = tk.Text(root, height=15, width=100, wrap="word", font=("Courier", 10))
+    text_sql.pack(padx=10)
+    text_sql.config(state="disabled")
 
     root.mainloop()
 
