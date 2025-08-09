@@ -198,34 +198,37 @@ BEFORE INSERT ON GENNIN
 FOR EACH ROW EXECUTE FUNCTION verificar_disjuncao_gennin();
 
 INSERT INTO ALDEIA (NOME) VALUES
-  ('Konoha'),
-  ('Sunagakure'),
-  ('Kumogakure'),
-  ('Kirigakure'),
-  ('Iwagakure');
+  ('Konoha'), -- Folha
+  ('Sunagakure'), -- Areia
+  ('Kumogakure'), -- Nuvem
+  ('Kirigakure'), -- Névoa
+  ('Iwagakure'); -- Pedra
 
 INSERT INTO NINJA (RG_NINJA, NOME_CLA, PRIMEIRO_NOME, CODINOME, NOME_ALDEIA, RIVAL_RG) VALUES
-  ('000000001', 'Uzumaki', 'Naruto', 'Ninja Laranja', 'Konoha', '000000002'),('000000002', 'Uchiha', 'Sasuke', 'Avenger', 'Konoha', '000000001'),('000000003', 'Haruno', 'Sakura', 'Punho de Aço', 'Konoha', '000000017'),('000000004', 'Hatake', 'Kakashi', 'Ninja Copiador', 'Konoha', NULL),
-  ('000000005', 'Sarutobi', 'Hiruzen', 'Sandaime', 'Konoha', NULL),
-  ('000000006', 'Senju', 'Tobirama', 'Nidaime', 'Konoha', NULL),
-  ('000000007', 'Senju', 'Hashirama', 'Shodai', 'Konoha', NULL),
-  ('000000008', 'Namikaze', 'Minato', 'Relâmpago Amarelo', 'Konoha', NULL),
-  ('000000009', 'Gaara', 'Sabaku', 'Gaara do Deserto', 'Sunagakure', '000000001'),
-  ('000000010', 'Killer', 'Bee', 'Jinchuuriki 8 Caudas', 'Kumogakure', NULL),
+  ('000000001', 'Uzumaki', 'Naruto', 'Ninja cabeça oca', 'Konoha', '000000002'),
+  ('000000002', 'Uchiha', 'Sasuke', 'Avenger', 'Konoha', '000000001'),
+  ('000000003', NULL, 'Haruno Sakura', 'Punho de Aço', 'Konoha', '000000017'),
+  ('000000004', NULL, 'Hatake Kakashi', 'Ninja Copiador', 'Konoha', NULL),
+  ('000000005', 'Sarutobi', 'Hiruzen', 'Sandaime Hokage', 'Konoha', NULL),
+  ('000000006', 'Senju', 'Tobirama', 'Nidaime Hokage', 'Konoha', NULL),
+  ('000000007', 'Senju', 'Hashirama', 'Shodai Hokage', 'Konoha', NULL),
+  ('000000008', NULL, 'Namikaze Minato', 'Relâmpago Amarelo', 'Konoha', NULL),
+  ('000000009', 'Sabaku', 'Gaara', 'Gaara do Deserto', 'Sunagakure', '000000001'),
+  ('000000010', NULL, 'Killer Bee', 'Jinchuuriki da 8 Caudas', 'Kumogakure', NULL),
   ('000000011', 'Nara', 'Shikamaru', 'Mestre das Sombras', 'Konoha', NULL),
   ('000000012', 'Akimichi', 'Choji', 'Punho de Mil Quilos', 'Konoha', NULL),
   ('000000013', 'Inuzuka', 'Kiba', 'Fera de Konoha', 'Konoha', NULL),
   ('000000014', 'Aburame', 'Shino', 'Mestre dos Insetos', 'Konoha', NULL),
   ('000000015', 'Hyuuga', 'Neji', 'Prodígio do Byakugan', 'Konoha', NULL),
-  ('000000016', 'Umino', 'Iruka', 'Instrutor', 'Konoha', NULL),
+  ('000000016', NULL, 'Umino Iruka', NULL, 'Konoha', NULL),
   ('000000017', 'Yamanaka', 'Ino', 'Flor Mortal', 'Konoha', '000000003'),
   ('000000018', 'Nara', 'Shikaku', 'Estrategista', 'Konoha', NULL),
-  ('000000019', 'Kamizuki', 'Izumo', 'Guarda do Portão', 'Konoha', NULL),
-  ('000000020', 'Kotetsu', 'Hagane', 'Guarda do Portão', 'Konoha', NULL),
-  ('000000021', 'Maito', 'Gai', 'Sensei da Juventude', 'Konoha', '000000004'),
-  ('000000022', 'Rock', 'Lee', 'Jovem Gênio do Taijutsu', 'Konoha', '000000002'),
+  ('000000019', NULL, 'Kamizuki Izumo', NULL, 'Konoha', NULL),
+  ('000000020', NULL, 'Kotetsu Hagane', NULL, 'Konoha', NULL),
+  ('000000021', NULL, 'Maito Gai', 'Besta verde de Konoha', 'Konoha', '000000004'),
+  ('000000022', NULL, 'Rock Lee', 'Gênio do trabalho duro', 'Konoha', '000000002'),
   ('000000023', 'Hyuuga', 'Hinata', 'Princesa do Byakugan', 'Konoha', NULL),
-  ('000000024', 'Yuuhi', 'Kurenai', 'Mestra do Genjutsu', 'Konoha', NULL),
+  ('000000024', NULL, 'Yuuhi Kurenai', 'Mestra do Genjutsu', 'Konoha', NULL),
   ('000000025', NULL, 'Tenten', 'Mestra das Armas', 'Konoha', NULL),
   ('000000026', 'Sarutobi', 'Asuma', 'Mestre do Vento', 'Konoha', NULL),
   ('000000027', 'Sabaku', 'Kankuro', 'Mestre de Marionetes', 'Sunagakure', '000000025'),
@@ -257,7 +260,6 @@ INSERT INTO NINJA_COMPOE_EQUIPE (RG_NINJA, EQUIPE) VALUES
   ('000000026', 10),('000000011', 10),('000000012', 10),('000000017', 10),
   ('000000009', 3),('000000027', 3),('000000028', 3);
 
-
 INSERT INTO MISSAO (EQUIPE, DATA_FINALIZACAO, RANK, RECOMPENSA, DESCRICAO) VALUES
   (7, '2003-03-01', 'C', 500.00, 'Proteção ao construtor de pontes Tazuna'),
   (7, '2003-04-15', 'B', 2000.00, 'Captura de bandidos no País das Ondas'),
@@ -271,28 +273,31 @@ INSERT INTO MISSAO (EQUIPE, DATA_FINALIZACAO, RANK, RECOMPENSA, DESCRICAO) VALUE
   (7, '2003-07-01', 'A', 5000.00, 'Infiltração e coleta de informações em vila inimiga');
 
 INSERT INTO JUTSU (RG_NINJA, NOME, ELEMENTO, RANK) VALUES
-  ('000000001', 'Rasengan', 'FUUTON', 'A'),
-  ('000000001', 'Kage Bunshin', 'FUUTON', 'B'),
+  ('000000001', 'Rasengan', NULL, 'A'),
+  ('000000001', 'Kage Bunshin', NULL, 'B'),
   ('000000002', 'Chidori', 'RAITON', 'A'),
   ('000000002', 'Amaterasu', 'ENTON', 'S'),
-  ('000000003', 'Chakra Enhanced Strength', 'DOTON', 'B'),
+  ('000000003', 'Iryou Ninjutsu', NULL, 'B'),
   ('000000004', 'Raikiri', 'RAITON', 'S'),
-  ('000000004', 'Kamui', 'RAITON', 'SS'),
+  ('000000004', 'Kamui', NULL, 'SS'),
   ('000000007', 'Mokuton Hijutsu', 'MOKUTON', 'SS'),
   ('000000009', 'Sabaku Kyuu', 'DOTON', 'A'),
-  ('000000010', 'Tailed Beast Bomb', 'RAITON', 'SS');
+  ('000000010', 'Tailed Beast Bomb', NULL, 'SS'),
+  ('000000008', 'Hiraishin', NULL, 'SS'),
+  ('000000006', 'Suijinheki', 'SUITON', 'B'),
+  ('000000026', 'Fuujin no Jutsu', 'FUUTON', 'A');
 
 INSERT INTO BIJU (NOME, APELIDO, RG_NINJA) VALUES
-  ('Kurama', 'Kyuubi', '000000001'),
-  ('Shukaku', 'Ichibi', '000000009'),
-  ('Gyuki', 'Hachibi', '000000010'),
-  ('Matatabi', 'Nibi', NULL),
-  ('Isobu', 'Sanbi', NULL),
-  ('Son Gokū', 'Yonbi', NULL),
-  ('Kokuo', 'Gobi', NULL),
-  ('Saiken', 'Rokubi', NULL),
-  ('Chomei', 'Nanabi', NULL),
-  ('Juubi', 'Dez Caudas', NULL);
+  ('Shukaku', 'Ichibi', '000000009'), -- 1 Cauda
+  ('Matatabi', 'Nibi', NULL), -- 2 Caudas
+  ('Isobu', 'Sanbi', NULL), -- 3 Caudas
+  ('Son Gokuu', 'Yonbi', NULL), -- 4 Caudas
+  ('Kokuou', 'Gobi', NULL), -- 5 Caudas
+  ('Saiken', 'Rokubi', NULL), -- 6 Caudas
+  ('Choumei', 'Nanabi', NULL), -- 7 Caudas
+  ('Gyuuki', 'Hachibi', '000000010'), -- 8 Caudas
+  ('Kurama', 'Kyuubi', '000000001'), -- 9 Caudas
+  ('Juubi', 'Dez Caudas', NULL); -- 10 Caudas
 
 INSERT INTO EXAME_CHUNNIN (EXAMINADOR_RG, EXAMINADO_RG) VALUES
   ('000000004', '000000001'),('000000004', '000000002'),

@@ -30,41 +30,41 @@ Auxiliar no aprendizado dos conceitos abordados na disciplina ao aplicá-los de 
 
 Naruto é um mangá/anime onde o protagonista enfrenta diversos inimigos no caminho para conseguir quebrar o ciclo de ódio do mundo ninja.
 
-Entidade Ninja e seus atributos:
+#### Entidade Ninja e seus atributos:
 
-Na obra de Naruto, os personagens principais são os Ninjas. Cada um possui um Registro Ninja único e seus Nomes são compostos, em sua maioria, pelo seu Primeiro Nome e o Nome do seu Clã, ex: "Naruto Uzumaki"; além disso, alguns Ninjas tem um Codinome, ex: "Kakashi do Sharingan". Todos os Ninjas tem um ou vários Jutsus, cada um deles com um Nome, Tipo, Elemento da natureza e Rank de dificuldade.
+Na obra de Naruto, os personagens principais são os Ninjas. Cada um possui um Registro Ninja único e seus Nomes são compostos, em sua maioria, pelo Nome do seu Clã e seu Primeiro Nome, ex: "Uzumaki Naruto"; além disso, alguns Ninjas tem um Codinome, ex: "Ninja cabeça oca". Todos os Ninjas tem um ou vários Jutsus, cada um deles com um Nome, Elemento da natureza e Rank de dificuldade.
 
-Heranças de Ninja:
+#### Heranças de Ninja:
 
-Os Ninjas podem ser classificados unicamente em um dos 4 títulos seguintes, do mais baixo pro mais alto: Genin, Chuunin, Jounin e Kage. O Kage é o Ninja que lidera sua respectiva Aldeia e tem um Nº que informa qual o seu número na linha de líderes da sua Aldeia. O Jounin é o Ninja que possui alunos e/ou é uma espécie de general. Chuunin é um título dado ao Genin que foi aprovado num exame Chuunin, podendo agir como uma espécie de capitão em certas ocasiões. Já Genin é o título dado ao aluno recém formado da academia ninja.
+Os Ninjas podem ser classificados unicamente em um dos 4 títulos seguintes, do mais baixo pro mais alto: Genin, Chuunin, Jounin e Kage. O Kage é o Ninja que lidera sua respectiva Aldeia e tem um Nº que informa qual o seu número na linha de sucessão de líderes dela. O Jounin é o Ninja que possui alunos e/ou é uma espécie de general. Chuunin é um título dado ao Genin que foi aprovado num exame chuunin, podendo agir como uma espécie de capitão em certas ocasiões. Já Genin é o título dado ao aluno recém formado na academia ninja.
 
-Entidade Aldeia, seu atributo e relacionamento Nasceu:
+#### Entidade Aldeia, seu atributo e relacionamento Nasceu:
 
-Uma Aldeia é o local único onde cada Ninja Nasce e nela Nascem vários Ninja, sendo necessário que um Ninja tenha nascido numa Aldeia para ser considerado com tal. Cada Aldeia possui um nome único.
+Uma Aldeia é o local único onde cada Ninja Nasce e nela Nascem vários Ninjas, sendo necessário que um Ninja tenha nascido numa Aldeia para ser considerado com tal. Cada Aldeia possui um nome único.
 
-Entidade Bijuu, seus atributos e relacionamento Tem:
+#### Entidade Bijuu, seus atributos e relacionamento Tem:
 
-Um Ninja pode Ter uma única Bijuu (seres mitológicos de muito poder) e uma Bijuu só pode estar num único Ninja. Cada uma tem um Nome único, ex: "Kurama" e um Apelido, ex: "Kyuubi".
+Um Ninja pode Ter uma única Bijuu, que são seres mitológicos de muito poder; e uma Bijuu só pode ser Tida por um único Ninja. Cada uma tem um Nome único, ex: "Kurama" e um Apelido, ex: "Kyuubi".
 
-Auto relacionamento Rivaliza:
+#### Auto relacionamento Rivaliza:
 
 Um Ninja pode ter vários outros Ninjas que são seus Rivais, ao passo que ele é Rivalizado apenas por um único outro. Ex: Naruto possui vários rivais, porém, ele só considera Sasuke como sendo seu rival principal.
 
-Entidade Equipe, seu atributo e relacionamento Compõe:
+#### Entidade Equipe, seu atributo e relacionamento Compõe:
 
-Um Ninja pode compor várias Equipes e cada Equipe pode ser composta por vários Ninjas. Cada Equipe tem um Número único e precisa ter Ninjas para existir.
+Um Ninja pode Compor várias Equipes e cada Equipe pode ser Composta por vários Ninjas. Cada Equipe tem um Número único e precisa ter Ninjas para existir.
 
-Entidade fraca Missão, seus atributos e relacionamento identificador Faz:
+#### Entidade fraca Missão, seus atributos e relacionamento identificador Faz:
 
-Uma Equipe Faz várias Missões e uma Missão só pode ser feita por uma única Equipe. Cada Missão depende do Nº da Equipe que a realizou e sua Data de finalização para sua identificação. Além disso, ela possui um Rank de dificuldade, uma Recompensa e uma breve Descrição do que deve ser feito.
+Uma Equipe Faz várias Missões e uma Missão só pode ser Feita por uma única Equipe. Cada Missão depende do Nº da Equipe que a realizou e sua Data de finalização para sua identificação. Além disso, ela possui um Rank de dificuldade, uma Recompensa e uma breve Descrição do que deve ser feito.
 
-Relacionamento ternário Avalia:
+#### Relacionamento ternário Avalia:
 
 Numa Missão, um Genin é Avaliado por um único Jounin; Um Genin é Avaliado por um mesmo Jounin em várias Missões; Numa Missão, um Jounin Avalia vários Genins.
 
-Relacionamento Exame Chuunin, Assiste e entidade associativa:
+#### Relacionamento Exame Chuunin, Assiste e entidade associativa:
 
-Um Jounin é examinador de vários Genins num Exame Chuunin; Um Genin é examinado por vários Jounins num Exame Chuunin. Durante o Exame Chuunin, é possível mas não necessário, que um ou mais outros Chuunins já com este título, assista seus colegas; ao passo que um Chuunin pode assistir vários Exames Chuunin.
+Um Jounin é Examinador de vários Genins num Exame Chuunin; Um Genin é Examinado por vários Jounins num Exame Chuunin. Durante o Exame Chuunin, é possível mas não necessário, que um ou mais outros Chuunins já com este título, assista seus colegas; ao passo que um Chuunin pode assistir vários Exames Chuunin.
 
 ## 🚀 Executando a Database
 

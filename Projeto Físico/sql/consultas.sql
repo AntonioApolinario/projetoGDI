@@ -74,7 +74,8 @@ WHERE
     );
 
 --Subconsulta do tipo linha
---Qual ninja tem mais missões?
+-- Ninjas que moram e tem o mesmo clã
+-- do ninja de rg = '000000006' (Tobirama)
 SELECT
     N.PRIMEIRO_NOME,
     N.CODINOME
